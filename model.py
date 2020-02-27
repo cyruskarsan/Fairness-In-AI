@@ -141,3 +141,18 @@ test_female = test_female.drop(columns="income")
 
 print("Male error: " + str(error(male_answers, optimal_dt.predict(test_male))))
 print("Female error: " + str(error(female_answers, optimal_dt.predict(test_female))))
+
+
+
+def error_by_feature(dataframe, column_dict, model):
+	"""
+	ARGS:
+		dataframe: the main dataframe
+		column_dict: the feature we are trying to isolate (one of the dictionaries from above)
+		model: a machine learning model
+
+	RETURN:
+		dict containing column value and prediction error
+	"""
+
+	return
