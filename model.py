@@ -7,6 +7,7 @@ By Nick, Cyrus, and Clarence
 """
 
 import pandas
+import matplotlib.pyplot as plt
 from sklearn import linear_model, tree
 from sklearn.metrics import mean_squared_error
 import numpy as np
@@ -68,30 +69,14 @@ income_answers = dataframe['income']
 training_data = dataframe
 training_data = training_data.drop(columns="income")
 
-x_train = training_data.head(1000)
-x_test = training_data.tail(1000)
-y_train = income_answers.head(1000).ravel()
-y_test = income_answers.tail(1000).ravel()
+x_train = training_data
+x_test = training_data.tail(8000)
+y_train = income_answers.ravel()
+y_test = income_answers.tail(8000).ravel()
 
 dt = tree.DecisionTreeClassifier(max_depth=5)
-logreg = linear_model.LogisticRegression(solver='liblinear')
-logreg.fit(x_train, y_train)
 dt.fit(x_train, y_train)
-Y_hat_logreg = logreg.predict(x_test)
 Y_hat_dt = dt.predict(x_test)
 
-
-print((error(y_test, Y_hat_dt), error(y_test, Y_hat_logreg)))
-
-
-
-
-
-
-
-
-
-
-
-
+print(error(y_test, Y_hat_dt))
 
