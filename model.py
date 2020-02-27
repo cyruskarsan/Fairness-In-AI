@@ -82,13 +82,11 @@ dt_error_data = []
 log_error_data = []
 count=0
 
+
+# create graph for error based on sample training size
 for i in range(500,30000,500):
-  #fit data on proper slices
   dt.fit(x_train[:i], y_train[:i])
-  #prediction part
   dt_error_data.append(error(y_test, dt.predict(x_test)))
-
-
 x_axis = range(500,30000,500)
 x_label = "Sample Size"
 y_label = "Test Error"
@@ -96,13 +94,12 @@ plt.xlabel(x_label)
 plt.ylabel(y_label)
 plt.plot(x_axis, dt_error_data, label="DT error data")
 plt.legend()
-
-print("Minimum error training size is: " + str(x_axis[dt_error_data.index(min(dt_error_data))]))
-
+optimal_train_size = x_axis[dt_error_data.index(min(dt_error_data))]
+print("Minimum error training size is: " + str(optimal_train_size))
 plt.show()
 
 
-
+# create graph for error vs d-tree depth
 res_error = []
 train_error = []
 for i in range(1,16):
@@ -110,7 +107,6 @@ for i in range(1,16):
   dt.fit(x_train,y_train)
   res_error.append(error(y_test,dt.predict(x_test)))
   train_error.append(error(y_train,dt.predict(x_train)))
-
 x_axis_range = range(1,16)
 x_label = "Max Depth"
 y_label = "Test Error"
@@ -119,7 +115,19 @@ plt.ylabel(y_label)
 plt.plot(x_axis_range,res_error, label="X Test error")
 plt.plot(x_axis_range,train_error,label="X Train error")
 plt.legend()
-
-print("Minimum error for model complexity, d-tree height: " + str(x_axis_range[res_error.index(min(res_error))]))
-
+optimal_depth = x_axis_range[res_error.index(min(res_error))]
+print("Minimum error for d-tree depth: " + str(optimal_depth))
 plt.show()
+
+
+# creating and training optimal model
+optimal_dt = tree.DecisionTreeClassifier(max_depth=optimal_depth)
+opt_x = training_data.head(optimal_train_size)
+opt_y = income_answers.head(optimal_train_size).ravel()
+optimal_dt.fit(opt_x, opt_y)
+
+
+
+
+
+
