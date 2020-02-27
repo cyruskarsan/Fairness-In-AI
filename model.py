@@ -144,17 +144,24 @@ print("Female error: " + str(error(female_answers, optimal_dt.predict(test_femal
 
 
 
-def error_by_feature(dataframe, column_dict, model):
+def error_by_feature(dataframe, column_dict, col_name, model):
 	"""
 	ARGS:
 		dataframe: the main dataframe
 		column_dict: the feature we are trying to isolate (one of the dictionaries from above)
 		model: a machine learning model
+		col_name: string of column name
 
 	RETURN:
 		dict containing column value and prediction error
 
 		Example output: {"Male": 0.1675, "Female": 0.09125}
 	"""
+	test_dataframes = []
 
-	return
+	for item in column_dict:
+		test_dataframes.append(dataframe[dataframe[col_name]==column_dict[item]])
+
+	return test_sets
+
+print(error_by_feature(dataframe, sex, "sex", optimal_dt))
