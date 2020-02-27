@@ -138,4 +138,6 @@ female_answers = test_female['income']
 test_male = test_male.drop(columns="income")
 test_female = test_female.drop(columns="income")
 
-print(error(test_male, male_answers))
+
+print("Male error: " + str(error(male_answers, optimal_dt.predict(test_male))))
+print("Female error: " + str(error(female_answers, optimal_dt.predict(test_female))))
