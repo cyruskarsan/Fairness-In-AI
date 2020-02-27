@@ -69,6 +69,7 @@ income_answers = dataframe['income']
 training_data = dataframe
 training_data = training_data.drop(columns="income")
 
+
 x_train = training_data.head(len(training_data) - 2000)
 x_test = training_data.tail(2000)
 y_train = income_answers.head(len(training_data) - 2000).ravel()
@@ -128,6 +129,13 @@ optimal_dt.fit(opt_x, opt_y)
 
 
 
+test_male = dataframe[dataframe['sex'] == 1]
+test_female = dataframe[dataframe['sex'] == 0]
 
+male_answers = test_male['income']
+female_answers = test_female['income']
 
+test_male = test_male.drop(columns="income")
+test_female = test_female.drop(columns="income")
 
+print(error(test_male, male_answers))
