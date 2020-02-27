@@ -80,3 +80,22 @@ Y_hat_dt = dt.predict(x_test)
 
 print(error(y_test, Y_hat_dt))
 
+dt_error_data = []
+log_error_data = []
+count=0
+
+for i in range(500,30000,500):
+  #fit data on proper slices
+  dt.fit(x_train[:i], y_train[:i])
+  #prediction part
+  dt_error_data.append(error(y_test, dt.predict(x_test)))
+
+x_axis = range(500,30000,500)
+x_label = "Sample Size"
+y_label = "Test Error"
+plt.xlabel(x_label)
+plt.ylabel(y_label)
+plt.plot(x_axis, dt_error_data, label="DT error data")
+plt.legend()
+plt.show()
+
