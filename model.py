@@ -89,8 +89,6 @@ for i in range(500,30000,500):
   dt_error_data.append(error(y_test, dt.predict(x_test)))
 
 
-
-
 x_axis = range(500,30000,500)
 x_label = "Sample Size"
 y_label = "Test Error"
@@ -121,4 +119,7 @@ plt.ylabel(y_label)
 plt.plot(x_axis_range,res_error, label="X Test error")
 plt.plot(x_axis_range,train_error,label="X Train error")
 plt.legend()
+
+print("Minimum error for model complexity, d-tree height: " + str(x_axis_range[res_error.index(min(res_error))]))
+
 plt.show()
