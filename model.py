@@ -153,6 +153,8 @@ def error_by_feature(dataframe, column_dict, model):
 
 	RETURN:
 		dict containing column value and prediction error
+
+		Example output: {"Male": 0.1675, "Female": 0.09125}
 	"""
 
 	return
