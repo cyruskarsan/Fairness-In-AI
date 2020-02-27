@@ -69,16 +69,14 @@ income_answers = dataframe['income']
 training_data = dataframe
 training_data = training_data.drop(columns="income")
 
-x_train = training_data
-x_test = training_data.tail(8000)
-y_train = income_answers.ravel()
-y_test = income_answers.tail(8000).ravel()
+x_train = training_data.head(len(training_data) - 2000)
+x_test = training_data.tail(2000)
+y_train = income_answers.head(len(training_data) - 2000).ravel()
+y_test = income_answers.tail(2000).ravel()
 
 dt = tree.DecisionTreeClassifier(max_depth=5)
 dt.fit(x_train, y_train)
 Y_hat_dt = dt.predict(x_test)
-
-print(error(y_test, Y_hat_dt))
 
 dt_error_data = []
 log_error_data = []
@@ -90,6 +88,9 @@ for i in range(500,30000,500):
   #prediction part
   dt_error_data.append(error(y_test, dt.predict(x_test)))
 
+
+
+
 x_axis = range(500,30000,500)
 x_label = "Sample Size"
 y_label = "Test Error"
@@ -97,5 +98,11 @@ plt.xlabel(x_label)
 plt.ylabel(y_label)
 plt.plot(x_axis, dt_error_data, label="DT error data")
 plt.legend()
+
+print("Minimum error training size is: " + str(x_axis[dt_error_data.index(min(dt_error_data))]))
+
 plt.show()
+
+
+
 
