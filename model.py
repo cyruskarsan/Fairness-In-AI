@@ -105,4 +105,20 @@ plt.show()
 
 
 
+res_error = []
+train_error = []
+for i in range(1,16):
+  dt = tree.DecisionTreeClassifier(max_depth=i)
+  dt.fit(x_train,y_train)
+  res_error.append(error(y_test,dt.predict(x_test)))
+  train_error.append(error(y_train,dt.predict(x_train)))
 
+x_axis_range = range(1,16)
+x_label = "Max Depth"
+y_label = "Test Error"
+plt.xlabel(x_label)
+plt.ylabel(y_label)
+plt.plot(x_axis_range,res_error, label="X Test error")
+plt.plot(x_axis_range,train_error,label="X Train error")
+plt.legend()
+plt.show()
