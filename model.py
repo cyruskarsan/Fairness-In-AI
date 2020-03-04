@@ -158,10 +158,22 @@ def error_by_feature(dataframe, column_dict, col_name, model):
 		Example output: {"Male": 0.1675, "Female": 0.09125}
 	"""
 	test_dataframes = []
+	names = []
+	test_answers = []
+	res = {}
 
 	for item in column_dict:
 		test_dataframes.append(dataframe[dataframe[col_name]==column_dict[item]])
+		names.append(item)
+	for dframe in test_dataframes:
+		test_answers.append(dframe['income'])
+	
+	for i in range (len(test_dataframes)):
+		test_dataframes[i] = test_dataframes[i].drop(columns="income")
 
-	return test_sets
+	for i in range(len(names)):
+		res[names[i]] = error(test_answers[i],optimal_dt.predict(test_dataframes[i]))
+	
+	return res
 
 print(error_by_feature(dataframe, sex, "sex", optimal_dt))
