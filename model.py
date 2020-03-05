@@ -171,5 +171,34 @@ for feature in columns_with_mapping:
 	errors_by_feature[feature] = error_by_feature(dataframe, columns_with_mapping[feature], feature, optimal_dt)
 
 length_by_feature = {}
+for key in errors_by_feature:
+	for feature in errors_by_feature[key]:
+		if feature != ' ?':
+			length_by_feature[feature] = len(dataframe[dataframe[key] == columns_with_mapping[key][feature]])
+
+
+# graph that is errors by number of entries
+x_axis = []
+y_axis = []
+while length_by_feature:
+	feature = min(length_by_feature, key=length_by_feature.get)
+	x_axis.append(min(length_by_feature.values()))
+	for key in errors_by_feature:
+		for x in errors_by_feature[key]:
+			if x == feature:
+				y_axis.append(errors_by_feature[key][x])
+	del length_by_feature[feature]
+x_label = "Number of Entries"
+y_label = "Test Error"
+plt.xlabel(x_label)
+plt.ylabel(y_label)
+plt.plot(x_axis, y_axis, label="Error by Number of Entries")
+plt.legend()
+plt.show()
+
+
+
+
+
 
 
