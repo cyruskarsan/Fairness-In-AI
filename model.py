@@ -12,6 +12,40 @@ from sklearn import linear_model, tree
 from sklearn.metrics import mean_squared_error
 import numpy as np
 
+# helper funcitons
+def error_by_feature(dataframe, column_dict, col_name, model):
+	"""
+	ARGS:
+		dataframe: the main dataframe
+		column_dict: the feature we are trying to isolate (one of the dictionaries from above)
+		model: a machine learning model
+		col_name: string of column name
+
+	RETURN:
+		dict containing column value and prediction error
+
+		Example output: {"Male": 0.1675, "Female": 0.09125}
+	"""
+	test_dataframes = []
+	names = []
+	test_answers = []
+	res = {}
+
+	for item in column_dict:
+		test_dataframes.append(dataframe[dataframe[col_name]==column_dict[item]])
+		names.append(item)
+	for dframe in test_dataframes:
+		test_answers.append(dframe['income'])
+
+	for i in range (len(test_dataframes)):
+		test_dataframes[i] = test_dataframes[i].drop(columns="income")
+
+	for i in range(len(names)):
+		res[names[i]] = error(test_answers[i],optimal_dt.predict(test_dataframes[i]))
+
+	return res
+
+
 
 def error(y, y_hat):
     diff = np.abs(y_hat-y)
@@ -53,6 +87,10 @@ race = {" White": 0, " Asian-Pac-Islander": 1, " Amer-Indian-Eskimo": 2, " Other
 sex = {" Female": 0, " Male": 1}
 native_country = { " United-States": 1, " Cambodia": 2, " England": 3, " Puerto-Rico": 4, " Canada": 5, " Germany": 6, " Outlying-US(Guam-USVI-etc)": 7, " India": 8, " Japan": 9, " Greece": 10, " South": 11, " China": 12, " Cuba": 13, " Iran": 14, " Honduras": 15, " Philippines": 16, " Italy": 17, " Poland": 18, " Jamaica": 19, " Vietnam": 20, " Mexico": 21, " Portugal": 22, " Ireland": 23, " France": 24, " Dominican-Republic": 25, " Laos": 26, " Ecuador": 27, " Taiwan": 28, " Haiti": 29, " Columbia": 30, " Hungary": 31, " Guatemala": 32, " Nicaragua": 33, " Scotland": 34, " Thailand": 35, " Yugoslavia": 36, " El-Salvador": 37, " Trinadad&Tobago": 38, " Peru": 39, " Hong": 40, " Holand-Netherlands":41, " ?": 42}
 income = {" >50K": 0, " <=50K": 1}
+
+columns_with_mapping = {"workclass": workclass, "education": education, "marital_status": marital_status, "occupation": occupation, "relationship": relationship, "race": race, "sex": sex, "native_country": native_country, "income": income }
+
+
 
 dataframe.workclass = [workclass[item] for item in dataframe.workclass]
 dataframe.education = [education[item] for item in dataframe.education]
@@ -129,7 +167,7 @@ optimal_dt.fit(opt_x, opt_y)
 
 
 
-test_male = dataframe[dataframe['sex'] == 1]
+"""test_male = dataframe[dataframe['sex'] == 1]
 test_female = dataframe[dataframe['sex'] == 0]
 
 male_answers = test_male['income']
@@ -140,40 +178,15 @@ test_female = test_female.drop(columns="income")
 
 
 print("Male error: " + str(error(male_answers, optimal_dt.predict(test_male))))
-print("Female error: " + str(error(female_answers, optimal_dt.predict(test_female))))
+print("Female error: " + str(error(female_answers, optimal_dt.predict(test_female))))"""
+
+
+errors_by_feature = {}
+for feature in columns_with_mapping:
+	errors_by_feature[feature] = error_by_feature(dataframe, columns_with_mapping[feature], feature, optimal_dt)
+
+
+print(errors_by_feature)
 
 
 
-def error_by_feature(dataframe, column_dict, col_name, model):
-	"""
-	ARGS:
-		dataframe: the main dataframe
-		column_dict: the feature we are trying to isolate (one of the dictionaries from above)
-		model: a machine learning model
-		col_name: string of column name
-
-	RETURN:
-		dict containing column value and prediction error
-
-		Example output: {"Male": 0.1675, "Female": 0.09125}
-	"""
-	test_dataframes = []
-	names = []
-	test_answers = []
-	res = {}
-
-	for item in column_dict:
-		test_dataframes.append(dataframe[dataframe[col_name]==column_dict[item]])
-		names.append(item)
-	for dframe in test_dataframes:
-		test_answers.append(dframe['income'])
-	
-	for i in range (len(test_dataframes)):
-		test_dataframes[i] = test_dataframes[i].drop(columns="income")
-
-	for i in range(len(names)):
-		res[names[i]] = error(test_answers[i],optimal_dt.predict(test_dataframes[i]))
-	
-	return res
-
-print(error_by_feature(dataframe, sex, "sex", optimal_dt))
