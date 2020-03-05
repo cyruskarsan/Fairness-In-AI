@@ -166,27 +166,10 @@ opt_y = income_answers.head(optimal_train_size).ravel()
 optimal_dt.fit(opt_x, opt_y)
 
 
-
-"""test_male = dataframe[dataframe['sex'] == 1]
-test_female = dataframe[dataframe['sex'] == 0]
-
-male_answers = test_male['income']
-female_answers = test_female['income']
-
-test_male = test_male.drop(columns="income")
-test_female = test_female.drop(columns="income")
-
-
-print("Male error: " + str(error(male_answers, optimal_dt.predict(test_male))))
-print("Female error: " + str(error(female_answers, optimal_dt.predict(test_female))))"""
-
-
 errors_by_feature = {}
 for feature in columns_with_mapping:
 	errors_by_feature[feature] = error_by_feature(dataframe, columns_with_mapping[feature], feature, optimal_dt)
 
-
-print(errors_by_feature)
-
+length_by_feature = {}
 
 
