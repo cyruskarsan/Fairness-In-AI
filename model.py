@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from sklearn import linear_model, tree
 from sklearn.metrics import mean_squared_error
 import numpy as np
+from collections import Counter
 
 # helper funcitons
 def error_by_feature(dataframe, column_dict, col_name, model):
@@ -196,9 +197,22 @@ plt.plot(x_axis, y_axis, label="Error by Number of Entries")
 plt.legend()
 plt.show()
 
+#determine if model is guessing if women and black people make less than 50k
+#print predicitons for women and black people
+black_data = training_data[training_data["race"]==4]
+black_predicted = ((optimal_dt.predict(black_data)))
+black_counts = Counter(black_predicted)
 
 
+women_data = training_data[training_data["sex"]==0]
+women_predicted = optimal_dt.predict(women_data)
+women_counts = Counter(women_predicted)
 
+men_data = training_data[training_data["sex"]==1]
+men_predicted = optimal_dt.predict(men_data)
+men_counts = Counter(men_predicted)
 
-
-
+men_dt = dataframe[dataframe['sex']==1]
+white_men = men_dt[men_dt['race']==0]
+print(len(dataframe))
+print(len(white_men))
