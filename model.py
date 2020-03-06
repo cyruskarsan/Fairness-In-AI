@@ -122,6 +122,7 @@ dt_error_data = []
 log_error_data = []
 count=0
 
+plt.rcParams.update({'font.size': 30})
 
 # create graph for error based on sample training size
 for i in range(500,30000,500):
@@ -132,10 +133,11 @@ x_label = "Sample Size"
 y_label = "Test Error"
 plt.xlabel(x_label)
 plt.ylabel(y_label)
-plt.plot(x_axis, dt_error_data, label="DT error data")
+plt.plot(x_axis, dt_error_data, label="Dtree error data")
 plt.legend()
 optimal_train_size = x_axis[dt_error_data.index(min(dt_error_data))]
 print("Minimum error training size is: " + str(optimal_train_size))
+plt.title("Test Error by Training Sample Size")
 plt.show()
 
 
@@ -157,6 +159,7 @@ plt.plot(x_axis_range,train_error,label="X Train error")
 plt.legend()
 optimal_depth = x_axis_range[res_error.index(min(res_error))]
 print("Minimum error for d-tree depth: " + str(optimal_depth))
+plt.title("Test Error by D-tree Depth")
 plt.show()
 
 
@@ -170,6 +173,8 @@ optimal_dt.fit(opt_x, opt_y)
 errors_by_feature = {}
 for feature in columns_with_mapping:
 	errors_by_feature[feature] = error_by_feature(dataframe, columns_with_mapping[feature], feature, optimal_dt)
+
+print(errors_by_feature)
 
 length_by_feature = {}
 for key in errors_by_feature:
@@ -193,8 +198,8 @@ x_label = "Number of Entries"
 y_label = "Test Error"
 plt.xlabel(x_label)
 plt.ylabel(y_label)
-plt.plot(x_axis, y_axis, label="Error by Number of Entries")
-plt.legend()
+plt.plot(x_axis, y_axis)
+plt.title("Test Error by Number of Feature Entires")
 plt.show()
 
 #determine if model is guessing if women and black people make less than 50k
@@ -212,7 +217,13 @@ men_data = training_data[training_data["sex"]==1]
 men_predicted = optimal_dt.predict(men_data)
 men_counts = Counter(men_predicted)
 
+# showing that our dataset is overwhelmingly white men
 men_dt = dataframe[dataframe['sex']==1]
 white_men = men_dt[men_dt['race']==0]
-print(len(dataframe))
-print(len(white_men))
+white_predicted = optimal_dt.predict(men_data)
+white_counts = Counter(white_predicted)
+
+
+
+
+
