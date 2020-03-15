@@ -56,29 +56,14 @@ def error(y, y_hat):
 
 dataframe = pandas.read_csv("adult.data.csv")
 
-"""
-data in columns =
-age: continuous.
-workclass: Private
-fnlwgt: continuous.
-education: Bachelors
-education-num: continuous.
-marital-status: Married-civ-spouse
-occupation: Tech-support
-relationship: Wife
-race: White
-sex: Female
-capital-gain: continuous.
-capital-loss: continuous.
-hours-per-week: continuous.
-native-country: United-States
-"""
 
 columns = ["age", "workclass", "fnlwgt", "education", "education_num", "marital_status", "occupation", "relationship",
  "race", "sex", "capital-gain", "capital_loss", "hours_per_week", "native_country", "income"]
 
 dataframe.columns = columns
 
+
+# convert string data to numbers
 workclass = { " Private": 0, " Self-emp-not-inc": 1, " Self-emp-inc": 2, " Federal-gov": 3, " Local-gov": 4, " State-gov": 5, " Without-pay": 6, " ?": 7, " Never-worked": 8}
 education = { " Bachelors": 0, " Some-college":1 ," 11th":2 ," HS-grad":3 ," Prof-school":4 ," Assoc-acdm":5 ," Assoc-voc":6 ," 9th":7 ," 7th-8th":8 ," 12th":9 ," Masters":10 ," 1st-4th":11 ," 10th":12 ," Doctorate":13 ," 5th-6th":14 ," Preschool": 15}
 marital_status = { " Married-civ-spouse": 0, " Divorced": 1, " Never-married": 2, " Separated": 3, " Widowed": 4, " Married-spouse-absent": 5, " Married-AF-spouse": 6}
@@ -108,7 +93,7 @@ income_answers = dataframe['income']
 training_data = dataframe
 training_data = training_data.drop(columns="income")
 
-
+# train the model
 x_train = training_data.head(len(training_data) - 2000)
 x_test = training_data.tail(2000)
 y_train = income_answers.head(len(training_data) - 2000).ravel()
@@ -119,8 +104,6 @@ dt.fit(x_train, y_train)
 Y_hat_dt = dt.predict(x_test)
 
 dt_error_data = []
-log_error_data = []
-count=0
 
 plt.rcParams.update({'font.size': 30})
 
@@ -174,8 +157,6 @@ errors_by_feature = {}
 for feature in columns_with_mapping:
 	errors_by_feature[feature] = error_by_feature(dataframe, columns_with_mapping[feature], feature, optimal_dt)
 
-print(errors_by_feature)
-
 length_by_feature = {}
 for key in errors_by_feature:
 	for feature in errors_by_feature[key]:
@@ -208,10 +189,12 @@ black_data = training_data[training_data["race"]==4]
 black_predicted = ((optimal_dt.predict(black_data)))
 black_counts = Counter(black_predicted)
 
-
 women_data = training_data[training_data["sex"]==0]
 women_predicted = optimal_dt.predict(women_data)
 women_counts = Counter(women_predicted)
+
+print(black_counts)
+print(women_counts)
 
 men_data = training_data[training_data["sex"]==1]
 men_predicted = optimal_dt.predict(men_data)
@@ -222,6 +205,8 @@ men_dt = dataframe[dataframe['sex']==1]
 white_men = men_dt[men_dt['race']==0]
 white_predicted = optimal_dt.predict(men_data)
 white_counts = Counter(white_predicted)
+
+print(white_counts)
 
 
 
